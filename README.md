@@ -1,4 +1,4 @@
-# W40K SV Ranking Dashboard - Frontend
+# W40K SV Ranking - Frontend
 
 This is a modern, responsive web interface built to display Warhammer 40k ranking data. It consumes a custom API and renders the data using a "Grimdark" aesthetic inspired by the W40K universe.
 
