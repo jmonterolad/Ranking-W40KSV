@@ -9,7 +9,7 @@ const searchQuery = ref('')
 const fetchRanking = async () => {
   try {
     loading.value = true
-    const response = await fetch('http://127.0.0.1:8000/api/ranking')
+    const response = await fetch('https://rankingw40ksvbackend.vercel.app/api/ranking')
     if (!response.ok) throw new Error('Failed to connect to Holy Terra (Server)')
     const data = await response.json()
     ranking.value = data
