@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import RankingHubView from '../views/RankingHubView.vue'
 import RankingView from '../views/RankingView.vue'
 
 const router = createRouter({
@@ -12,7 +13,13 @@ const router = createRouter({
     },
     {
       path: '/ranking',
-      name: 'ranking',
+      name: 'ranking-hub',
+      component: RankingHubView
+    },
+    {
+      // El :id es un parámetro dinámico (kt2025, kt2026, etc.)
+      path: '/ranking/:id',
+      name: 'ranking-detail',
       component: RankingView
     }
   ]
