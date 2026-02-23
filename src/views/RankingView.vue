@@ -9,7 +9,7 @@ const error = ref(null)
 const searchQuery = ref('')
 const isGlitching = ref(false) 
 
-const IS_LOCAL = true 
+const IS_LOCAL = false 
 const API_BASE = IS_LOCAL 
   ? 'http://127.0.0.1:8000/api/ranking' 
   : 'https://rankingw40ksvbackend.vercel.app/api/ranking'
