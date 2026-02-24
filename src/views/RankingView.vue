@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import RankingPodium from '../components/RankingPodium.vue'
+import RankingTable from '../components/RankingTable.vue'
 
 const route = useRoute()
 const ranking = ref([])
@@ -19,7 +21,6 @@ const fetchRanking = async () => {
     loading.value = true
     isGlitching.value = false 
     error.value = null
-    
     const gameId = route.params.id 
     const response = await fetch(`${API_BASE}/${gameId}`)
     
@@ -30,33 +31,30 @@ const fetchRanking = async () => {
     
     ranking.value = data
     
+    // El glitch dura un poco más que la animación para asegurar que el usuario lo vea
     isGlitching.value = true
-    setTimeout(() => { isGlitching.value = false }, 700)
-
+    setTimeout(() => { isGlitching.value = false }, 800)
+    
   } catch (err) {
     error.value = err.message
-    console.error("Fetch error:", err)
+    console.error("Link Error:", err)
   } finally {
     loading.value = false
   }
 }
 
-watch(() => route.params.id, () => {
-  fetchRanking()
-})
+// Observar cambios en la ruta para recargar datos (ej. cambiar de KT a 40K)
+watch(() => route.params.id, () => fetchRanking())
 
 const rankingFiltrado = computed(() => {
-  let list = ranking.value.filter(jugador => {
-    return jugador['Jugadores'] && jugador['Jugadores'].toString().trim() !== ''
-  })
+  let list = ranking.value.filter(j => j['Jugadores'] && j['Jugadores'].toString().trim() !== '')
   
   if (searchQuery.value) {
-    list = list.filter(jugador => {
-      const nombre = (jugador['Jugadores'] || '').toLowerCase()
-      return nombre.includes(searchQuery.value.toLowerCase())
-    })
+    const query = searchQuery.value.toLowerCase()
+    list = list.filter(j => j['Jugadores'].toLowerCase().includes(query))
   }
   
+  // Ordenamiento por puntos descendente
   return list.sort((a, b) => (Number(b['Puntos']) || 0) - (Number(a['Puntos']) || 0))
 })
 
@@ -79,12 +77,13 @@ onMounted(fetchRanking)
     </div>
 
     <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-10 gap-6">
-      <div :class="{ 'glitch-text': isGlitching }">
+      <div :class="{ 'under-fire': isGlitching }" class="relative overflow-hidden lg:overflow-visible">
         <h2 class="text-3xl md:text-4xl font-black text-orange-500 uppercase italic tracking-tighter shadow-orange-500/20">
           Codex Ranking
         </h2>
-        <p class="text-slate-400 font-mono text-[10px] md:text-xs uppercase tracking-[0.3em]">
+        <p class="text-slate-400 font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] relative">
           DATA_STREAM: {{ route.params.id.replace('kt', 'Kill Team ').replace('40k1k', '40K 1000pts ') }}
+          <span v-if="isGlitching" class="tracer-line"></span>
         </p>
       </div>
 
@@ -103,100 +102,79 @@ onMounted(fetchRanking)
         <div class="absolute h-20 w-20 border-2 border-orange-500/30 rounded-full animate-ping"></div>
         <div class="h-12 w-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
-      <p class="text-orange-500 font-bold tracking-[0.5em] text-[10px] mt-10 uppercase animate-pulse">
-        Estableciendo enlace de datos...
-      </p>
+      <p class="text-orange-500 font-bold tracking-[0.5em] text-[10px] mt-10 uppercase animate-pulse">Sincronizando con el frente...</p>
     </div>
 
-    <div v-else-if="error" class="bg-red-900/20 border-2 border-red-600 p-8 rounded-xl text-red-400 text-center font-mono">
-      <p class="text-xl font-black mb-2 tracking-tighter uppercase">⚠️ Signal_Lost</p>
+    <div v-else-if="error" class="bg-red-900/20 border-2 border-red-600 p-8 rounded-xl text-red-400 text-center font-mono uppercase">
+      <p class="text-xl font-black mb-2 tracking-tighter">⚠️ Signal_Lost</p>
       <p class="mb-6 opacity-80 text-xs">{{ error }}</p>
-      <RouterLink to="/ranking" class="inline-block px-6 py-2 border border-red-500 hover:bg-red-600 hover:text-white transition-all uppercase text-[10px] tracking-widest font-bold">
-        Reiniciar Terminal
-      </RouterLink>
+      <RouterLink to="/ranking" class="inline-block px-6 py-2 border border-red-500 hover:bg-red-600 hover:text-white transition-all text-[10px] tracking-widest font-bold text-center">Reiniciar Terminal</RouterLink>
     </div>
 
-    <div v-else :class="{ 'glitch-scan': isGlitching }" class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm shadow-2xl transition-all duration-300">
-      <table class="w-full text-left border-collapse min-w-[700px]">
-        <thead>
-          <tr class="bg-slate-800/80 text-orange-400 text-[10px] uppercase tracking-widest font-black">
-            <th class="px-4 md:px-6 py-4 border-b border-slate-700">#</th>
-            <th class="px-4 md:px-6 py-4 border-b border-slate-700">Jugador</th>
-            <th class="px-3 md:px-4 py-4 border-b border-slate-700">Rango</th>
-            <th class="px-3 md:px-4 py-4 border-b border-slate-700 text-center">PJ</th>
-            <th class="px-3 md:px-4 py-4 border-b border-slate-700 text-center text-green-500 font-bold">PG</th>
-            <th class="px-3 md:px-4 py-4 border-b border-slate-700 text-center text-yellow-500">PE</th>
-            <th class="px-3 md:px-4 py-4 border-b border-slate-700 text-center text-red-500">PP</th>
-            <th class="px-4 md:px-6 py-4 border-b border-slate-700 text-right">Puntos</th>
-          </tr>
-        </thead>
-        
-        <tbody class="divide-y divide-slate-800 font-mono">
-          <tr v-for="(jugador, index) in rankingFiltrado" :key="index" class="hover:bg-orange-500/5 transition-colors group text-xs md:text-sm">
-            <td class="px-4 md:px-6 py-4 text-slate-500">{{ index + 1 }}</td>
-            <td class="px-4 md:px-6 py-4 font-bold text-white uppercase group-hover:text-orange-400 transition-colors">
-              {{ jugador['Jugadores'] }}
-            </td>
-            <td class="px-3 md:px-4 py-4">
-              <span class="bg-slate-800 px-2 py-0.5 rounded text-[9px] border border-slate-700 text-slate-300 uppercase tracking-tighter">
-                {{ jugador['Rango'] || 'Iniciado' }}
-              </span>
-            </td>
-            <td class="px-3 md:px-4 py-4 text-center text-slate-400">{{ jugador['Juegos'] }}</td>
-            <td class="px-3 md:px-4 py-4 text-center text-green-500 font-bold">{{ jugador['Victorias'] }}</td>
-            <td class="px-3 md:px-4 py-4 text-center text-yellow-500">{{ jugador['Empates'] }}</td>
-            <td class="px-3 md:px-4 py-4 text-center text-red-500">{{ jugador['Derrotas'] }}</td>
-            <td class="px-4 md:px-6 py-4 text-right font-black text-orange-500 text-base md:text-lg tracking-tighter">
-              {{ jugador['Puntos'] }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div v-else>
+      <RankingPodium :ranking="rankingFiltrado" :searchQuery="searchQuery" />
+      <RankingTable :ranking="rankingFiltrado" :isGlitching="isGlitching" />
     </div>
-
-    <p class="md:hidden text-[9px] text-slate-500 text-center mt-6 uppercase tracking-[0.3em] opacity-50">
-      ← Desliza para ver registros completos →
-    </p>
-
   </div>
 </template>
 
 <style scoped>
-/* Estilos Glitch heredados del componente anterior */
-.glitch-scan {
-  animation: scanline 0.3s ease-in-out infinite;
-  filter: brightness(1.2) contrast(1.1);
-  position: relative;
+/* EFECTO BAJO FUEGO */
+.under-fire {
+  animation: recoil 0.1s steps(2) infinite;
 }
 
-@keyframes scanline {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 1px) skewX(2deg); opacity: 0.8; }
-  40% { transform: translate(2px, -1px) skewX(-2deg); }
-  60% { transform: translate(-1px, 2px); opacity: 0.9; }
-  80% { transform: translate(1px, -2px) skewX(1deg); }
-  100% { transform: translate(0); }
+@keyframes recoil {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3px, 1px) skewX(2deg); }
+  50% { transform: translate(4px, -1px) brightness(2); }
+  75% { transform: translate(-2px, 2px) skewX(-2deg); }
+  100% { transform: translate(0, 0); }
 }
 
-.glitch-text {
-  animation: textNoise 0.4s infinite;
+.under-fire::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5; /* Bajado un poco para no tapar el texto naranja */
+  animation: muzzle-flash 0.2s ease-out infinite;
+}
+
+@keyframes muzzle-flash {
+  0% { opacity: 0; }
+  20% { opacity: 0.3; } /* Un poco más sutil */
+  100% { opacity: 0; }
+}
+
+.under-fire h2 {
   text-shadow: 2px 0 #ff0000, -2px 0 #00ff00;
+  animation: combat-noise 0.4s infinite;
 }
 
-@keyframes textNoise {
+@keyframes combat-noise {
   0% { text-shadow: 1px 1px #ff0000; }
-  25% { text-shadow: -1px -1px #00ff00; transform: translate(1px, 0); }
-  50% { text-shadow: 2px -1px #0000ff; }
-  75% { text-shadow: -2px 1px #ff00ff; transform: translate(-1px, 1px); }
+  25% { text-shadow: -2px -2px #ffffff; transform: scale(1.02); }
+  50% { text-shadow: 3px -1px #0000ff; }
+  75% { text-shadow: -1px 2px #ff0000; }
   100% { text-shadow: 1px 1px #ff0000; }
 }
 
-.glitch-scan::after {
-  content: "";
+.tracer-line {
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-  background-size: 100% 4px;
-  pointer-events: none;
+  top: 50%;
+  left: -100%;
+  width: 80px; /* Un poco más larga */
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ffcc00, white);
+  box-shadow: 0 0 10px #ffcc00;
+  animation: tracer-pass 0.4s linear infinite;
+}
+
+@keyframes tracer-pass {
+  0% { left: -100%; }
+  100% { left: 200%; }
 }
 </style>
