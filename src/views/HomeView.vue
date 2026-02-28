@@ -2,37 +2,38 @@
   <div class="max-w-6xl mx-auto px-4 py-12 md:py-24 text-center">
     <div class="w-24 h-1 bg-orange-600 mx-auto mb-8 shadow-[0_0_15px_rgba(234,88,12,0.6)] animate-pulse"></div>
 
-    <section class="mb-16">
-      <h1 class="text-5xl md:text-8xl font-black mb-4 uppercase italic tracking-tighter text-white drop-shadow-2xl">
-        SECTOR <span class="text-orange-500"> EL SALVADOR</span>
-      </h1>
-      <p class="text-slate-400 text-sm md:text-xl max-w-2xl mx-auto font-mono uppercase tracking-[0.2em] leading-relaxed">
-        Registro central de hostilidades y clasificaciones tácticas.
+    <section class="mb-12 flex flex-col items-center">
+      <img src="/src/assets/warhammersv.png" alt="Warhammer El Salvador Logo"
+        class="max-w-[380px] md:max-w-[600px] w-full h-auto mb-6 opacity-90 hover:opacity-100 transition-opacity duration-500" />
+
+      <p
+        class="text-slate-400 text-[10px] md:text-sm max-w-2xl mx-auto font-mono uppercase tracking-[0.3em] leading-relaxed text-center">
+        Gran comunidad Salvadoreña de Warhammer
       </p>
     </section>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-      <RouterLink 
-        to="/ranking" 
-        class="group relative overflow-hidden bg-slate-900/40 border border-slate-700 p-8 rounded-2xl hover:border-orange-500 transition-all duration-500 backdrop-blur-sm"
-      >
-        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
+      <RouterLink to="/ranking"
+        class="group relative overflow-hidden bg-slate-900/40 border border-slate-700 p-8 rounded-2xl hover:border-orange-500 transition-all duration-500 backdrop-blur-sm">
+        <!-- <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
           <span class="text-6xl italic font-black">01</span>
-        </div>
-        <h3 class="text-2xl font-bold text-orange-500 uppercase mb-3 text-left">Codex Ranking</h3>
+        </div> -->
+        <h3 class="text-2xl font-bold text-orange-500 uppercase mb-3 text-left">Ranking El Salvador</h3>
         <p class="text-slate-400 text-left text-sm leading-relaxed mb-6">
-          Consulta el estado actual de las facciones y los puntos de victoria acumulados por los operativos.
+          Tablas de posiciones de los participantes en la comunidad
         </p>
-        <div class="flex items-center text-white font-bold uppercase text-xs tracking-widest group-hover:gap-4 transition-all">
-          Acceder al ranking <span class="ml-2">→</span>
+        <div
+          class="flex items-center text-white font-bold uppercase text-xs tracking-widest group-hover:gap-4 transition-all">
+          Acceder a los ranking <span class="ml-2">→</span>
         </div>
       </RouterLink>
 
-      <div class="group relative overflow-hidden bg-slate-900/40 border border-slate-800 p-8 rounded-2xl opacity-60 grayscale hover:grayscale-0 transition-all duration-500 backdrop-blur-sm">
-        <div class="absolute top-0 right-0 p-4 opacity-10">
+      <div
+        class="group relative overflow-hidden bg-slate-900/40 border border-slate-800 p-8 rounded-2xl opacity-60 grayscale hover:grayscale-0 transition-all duration-500 backdrop-blur-sm">
+        <!-- <div class="absolute top-0 right-0 p-4 opacity-10">
           <span class="text-6xl italic font-black">02</span>
-        </div>
-        <h3 class="text-2xl font-bold text-slate-500 uppercase mb-3 text-left italic">Próximos Despliegues</h3>
+        </div> -->
+        <h3 class="text-2xl font-bold text-slate-500 uppercase mb-3 text-left italic">Eventos y calendarios</h3>
         <p class="text-slate-500 text-left text-sm leading-relaxed mb-6">
           Calendario de torneos y misiones de reconocimiento programadas para el ciclo 2026.
         </p>
@@ -42,7 +43,8 @@
       </div>
     </div>
 
-    <footer class="grid grid-cols-2 md:grid-cols-4 gap-4 py-8 border-t border-slate-800 text-[10px] md:text-xs font-mono text-slate-500 uppercase tracking-widest">
+    <footer
+      class="grid grid-cols-2 md:grid-cols-4 gap-4 py-8 border-t border-slate-800 text-[10px] md:text-xs font-mono text-slate-500 uppercase tracking-widest">
       <!-- <div class="flex flex-col gap-1">
         <span class="text-slate-700">Protocolo:</span>
         <span class="text-orange-500/50">Vermilion-Level</span>
@@ -70,12 +72,20 @@ h1 {
 }
 
 /* Animación de entrada suave */
-div, section {
+div,
+section {
   animation: fadeIn 0.8s ease-out forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
