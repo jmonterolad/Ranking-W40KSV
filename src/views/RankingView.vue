@@ -31,7 +31,6 @@ const fetchRanking = async () => {
     
     ranking.value = data
     
-    // El glitch dura un poco más que la animación para asegurar que el usuario lo vea
     isGlitching.value = true
     setTimeout(() => { isGlitching.value = false }, 800)
     
@@ -43,7 +42,6 @@ const fetchRanking = async () => {
   }
 }
 
-// Observar cambios en la ruta para recargar datos (ej. cambiar de KT a 40K)
 watch(() => route.params.id, () => fetchRanking())
 
 const rankingFiltrado = computed(() => {
@@ -54,7 +52,6 @@ const rankingFiltrado = computed(() => {
     list = list.filter(j => j['Jugadores'].toLowerCase().includes(query))
   }
   
-  // Ordenamiento por puntos descendente
   return list.sort((a, b) => (Number(b['Puntos']) || 0) - (Number(a['Puntos']) || 0))
 })
 
@@ -119,7 +116,6 @@ onMounted(fetchRanking)
 </template>
 
 <style scoped>
-/* EFECTO BAJO FUEGO */
 .under-fire {
   animation: recoil 0.1s steps(2) infinite;
 }
@@ -139,13 +135,13 @@ onMounted(fetchRanking)
   background: white;
   opacity: 0;
   pointer-events: none;
-  z-index: 5; /* Bajado un poco para no tapar el texto naranja */
+  z-index: 5;
   animation: muzzle-flash 0.2s ease-out infinite;
 }
 
 @keyframes muzzle-flash {
   0% { opacity: 0; }
-  20% { opacity: 0.3; } /* Un poco más sutil */
+  20% { opacity: 0.3; }
   100% { opacity: 0; }
 }
 
@@ -166,7 +162,7 @@ onMounted(fetchRanking)
   position: absolute;
   top: 50%;
   left: -100%;
-  width: 80px; /* Un poco más larga */
+  width: 80px;
   height: 1px;
   background: linear-gradient(90deg, transparent, #ffcc00, white);
   box-shadow: 0 0 10px #ffcc00;

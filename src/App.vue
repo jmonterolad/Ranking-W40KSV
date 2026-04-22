@@ -1,5 +1,8 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { useAuthStore } from './stores/auth'
+
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -16,7 +19,7 @@ import { RouterLink, RouterView } from 'vue-router'
           />
         </RouterLink>
 
-        <div class="flex space-x-4 md:space-x-8">
+        <div class="flex items-center space-x-4 md:space-x-6">
           <RouterLink 
             to="/" 
             class="hover:text-orange-400 transition-colors uppercase tracking-widest text-[10px] md:text-xs font-medium" 
@@ -31,6 +34,39 @@ import { RouterLink, RouterView } from 'vue-router'
           >
             Ranking
           </RouterLink>
+          <RouterLink 
+            to="/calendario" 
+            class="hover:text-orange-400 transition-colors uppercase tracking-widest text-[10px] md:text-xs font-medium" 
+            active-class="text-orange-500 font-bold border-b border-orange-500"
+          >
+            calendario
+          </RouterLink>
+
+          <RouterLink 
+            v-if="authStore.user"
+            to="/admin" 
+            class="hover:text-green-400 text-green-500 transition-colors uppercase tracking-widest text-[10px] md:text-xs font-black" 
+            active-class="text-green-400 font-black border-b border-green-500"
+          >
+            Terminal
+          </RouterLink>
+
+          <button 
+            v-if="!authStore.user" 
+            @click="authStore.loginWithGoogle()"
+            class="bg-slate-800 hover:bg-orange-600 text-slate-300 hover:text-white border border-slate-600 hover:border-orange-500 px-3 py-1.5 rounded text-[9px] md:text-[10px] font-mono uppercase tracking-widest transition-all shadow-sm"
+          >
+            Identificarse
+          </button>
+          
+          <button 
+            v-else 
+            @click="authStore.logout()"
+            class="bg-red-950/50 hover:bg-red-600 text-red-400 hover:text-white border border-red-900 hover:border-red-500 px-3 py-1.5 rounded text-[9px] md:text-[10px] font-mono uppercase tracking-widest transition-all shadow-sm"
+          >
+            Desconectar
+          </button>
+
         </div>
       </div>
     </nav>

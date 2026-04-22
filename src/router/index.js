@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import RankingHubView from '../views/RankingHubView.vue'
 import RankingView from '../views/RankingView.vue'
 import CalendarioView from '../views/CalendarioView.vue'
+import AdminDashboardView from '../views/AdminDashboardView.vue'
+import { useAuthStore } from '../stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +20,6 @@ const router = createRouter({
       component: RankingHubView
     },
     {
-      // El :id es un parámetro dinámico (kt2025, kt2026, etc.)
       path: '/ranking/:id',
       name: 'ranking-detail',
       component: RankingView
@@ -27,8 +28,24 @@ const router = createRouter({
       path: '/calendario',
       name: 'calendario',
       component: CalendarioView
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminDashboardView,
+      meta: { requiresAuth: true }
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  if (to.meta.requiresAuth && !authStore.user) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router
