@@ -1,4 +1,5 @@
 <script setup>
+import { API_BASE_URL } from '../../config' //
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import DropdownTactico from './DropdownTactico.vue'
@@ -16,8 +17,8 @@ const cargarEventosAdmin = async () => {
   cargandoLista.value = true
   try {
     const [resKt26, res40k] = await Promise.all([
-      fetch('http://127.0.0.1:8000/api/eventos/kt2026'),
-      fetch('http://127.0.0.1:8000/api/eventos/40k1k2026')
+      fetch(`${API_BASE_URL}/api/eventos/kt2026`),
+      fetch(`${API_BASE_URL}/api/eventos/40k1k2026`)
     ])
     
     const dataKt26 = await resKt26.json()

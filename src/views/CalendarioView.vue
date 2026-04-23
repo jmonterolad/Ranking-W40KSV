@@ -1,4 +1,5 @@
 <script setup>
+import { API_BASE_URL } from '../config' //
 import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 
 const juegoSeleccionado = ref('kt2026')
@@ -11,13 +12,12 @@ let intervaloTimer = null
 const cargarEventos = async () => {
   cargando.value = true
   try {
-    const API_URL = `http://127.0.0.1:8000/api/eventos/${juegoSeleccionado.value}`
-    const response = await fetch(API_URL)
+    // Ahora usas la constante con el template string
+    const response = await fetch(`${API_BASE_URL}/api/eventos/${juegoSeleccionado.value}`)
     const data = await response.json()
-    
     eventos.value = (data.eventos || []).reverse()
   } catch (error) {
-    console.error("Fallo de comunicación con la base de datos:", error)
+    console.error("Error de comunicación:", error)
   } finally {
     cargando.value = false
   }
