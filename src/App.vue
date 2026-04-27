@@ -56,7 +56,7 @@ const authStore = useAuthStore()
             @click="authStore.loginWithGoogle()"
             class="bg-slate-800 hover:bg-orange-600 text-slate-300 hover:text-white border border-slate-600 hover:border-orange-500 px-3 py-1.5 rounded text-[9px] md:text-[10px] font-mono uppercase tracking-widest transition-all shadow-sm"
           >
-            Identificarse
+            Login
           </button>
           
           <button 
@@ -64,7 +64,7 @@ const authStore = useAuthStore()
             @click="authStore.logout()"
             class="bg-red-950/50 hover:bg-red-600 text-red-400 hover:text-white border border-red-900 hover:border-red-500 px-3 py-1.5 rounded text-[9px] md:text-[10px] font-mono uppercase tracking-widest transition-all shadow-sm"
           >
-            Desconectar
+            Logout
           </button>
 
         </div>
